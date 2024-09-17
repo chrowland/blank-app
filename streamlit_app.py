@@ -23,5 +23,5 @@ data_load_state.text("Done! (using st.cache_data)")
 
 load_data
 
-st/sibjeader('Raw data')
+st.subheader('Raw data')
 st.write(data)
