@@ -15,21 +15,25 @@ data = [
         "tweet": "What a great new feature! I love it!",
         "author": "John Rose",
         "sentiment": "🤩 Positive",
+        "ranking":1,
     },
     {
         "tweet": "I don't like this feature. It's not useful. I prefer chart improvements.",
         "author": "Will Hangu",
         "sentiment": "",
+         "ranking":2,
     },
     {
         "tweet": "Wow, the Streamlit team can be proud! What an achievement!",
         "author": "Luca Masucco",
         "sentiment": "",
+         "ranking":3,
     },
     {
         "tweet": "The recent ChatGPT breakthrough is really exciting.",
         "author": "Adrien Tree",
         "sentiment": "",
+         "ranking":4,
     },
 ]
 
