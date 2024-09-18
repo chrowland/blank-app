@@ -43,7 +43,7 @@ st.download_button(
 )
 
 data2=pd.DataFrame()
-data2['sentiments']=sum(data.sentiment)
+data2['sentiments']=sum(annotated.sentiment)
 data2['sent_squared']=data2.sentiments**2
 df2=pd.DataFrame(data2)
 
