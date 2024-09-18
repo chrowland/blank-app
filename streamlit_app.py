@@ -14,7 +14,7 @@ data = [
     {
         "tweet": "What a great new feature! I love it!",
         "author": "John Rose",
-        "sentiment": "🤩 Positive",
+        "sentiment": 5,
     },
     {
         "tweet": "I don't like this feature. It's not useful. I prefer chart improvements.",
@@ -34,8 +34,6 @@ data = [
 ]
 
 df = pd.DataFrame(data)
-df.sentiment = df.sentiment.astype("category")
-df.sentiment = df.sentiment.cat.add_categories(("☯ Neutral", "😤 Negative"))
 
 
 annotated = st.data_editor(df, hide_index=True, use_container_width=True)
@@ -43,3 +41,10 @@ annotated = st.data_editor(df, hide_index=True, use_container_width=True)
 st.download_button(
     "⬇️ Download annotations as .csv", annotated.to_csv(), "annotated.csv", use_container_width=True
 )
+
+data2=pd.DataFrame()
+data2['sentiments']=sum(data.sentiment)
+data2['sent_squared']=data2.sentiments**2
+df2=pd.DataFrame(data2)
+
+second_table=st.dataframe(df2,hide_index=True,use_container_width=True)
