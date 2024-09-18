@@ -1,7 +1,7 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
-from streamlit_extras.altex import _chart
+#from streamlit_extras.altex import _chart
 
 st.set_page_config(layout="centered", page_title="Data Editor", page_icon="🧮")
 
