@@ -1,50 +1,77 @@
+import altair as alt
 import pandas as pd
 import streamlit as st
+from streamlit_extras.altex import _chart
 
 st.set_page_config(layout="centered", page_title="Data Editor", page_icon="🧮")
 
-st.title("✍️ Annotations")
+st.title("📊 Data to Chart")
 st.caption("This is a demo of the `st.data_editor`.")
 
-st.write("")
-
-"""The new data editor makes it so easy to annotate data! Can you help us annotate sentiments for tweets about our latest release?"""
-
-data = [
-    {
-        "tweet": "What a great new feature! I love it!",
-        "author": "John Rose",
-        "sentiment": "🤩 Positive",
-        "ranking":1,
-    },
-    {
-        "tweet": "I don't like this feature. It's not useful. I prefer chart improvements.",
-        "author": "Will Hangu",
-        "sentiment": "",
-         "ranking":2,
-    },
-    {
-        "tweet": "Wow, the Streamlit team can be proud! What an achievement!",
-        "author": "Luca Masucco",
-        "sentiment": "",
-         "ranking":3,
-    },
-    {
-        "tweet": "The recent ChatGPT breakthrough is really exciting.",
-        "author": "Adrien Tree",
-        "sentiment": "",
-         "ranking":4,
-    },
-]
-
-df = pd.DataFrame(data)
-df.sentiment = df.sentiment.astype("category")
-df.sentiment = df.sentiment.cat.add_categories(("☯ Neutral", "😤 Negative"))
+"Let viewers edit your data and see how that impacts the rest of the app!"
 
 
-annotated = st.data_editor(df, hide_index=True, use_container_width=True, disabled=["tweet", "author"])
+@st.cache_data
+def get_data() -> pd.DataFrame:
+    df = pd.DataFrame(
+        {
+            "age": [12, 32, 45, 90, 89],
+            "gender": ["male", "male", "other", "female", "male"],
+            "active": [False, True, True, False, False],
+        },
+    )
 
-st.download_button(
-    "⬇️ Download annotations as .csv", annotated.to_csv(), "annotated.csv", use_container_width=True
-)
+    df.age = df.age.astype("uint64")
+    df.gender = df.gender.astype("category")
+    return df
 
+
+@st.cache_data
+def get_age_hist(df: pd.DataFrame) -> alt.Chart:
+    return _chart(
+        mark_function="bar",
+        data=pd.cut(
+            df.age, (0, 18, 30, 60, 100), labels=["0 - 18", "18 - 30", "30 - 60", "60 - 100"]
+        )
+        .value_counts()
+        .sort_index()
+        .reset_index(),
+        x=alt.X("index:N", title="Age", sort="x"),
+        y=alt.Y("age:Q", title="Count"),
+    )
+
+
+@st.cache_data
+def get_gender_hist(df: pd.DataFrame) -> alt.Chart:
+    return _chart(
+        mark_function="bar",
+        data=df.gender.value_counts().sort_index().reset_index(),
+        x=alt.X("index:N", title="Gender", sort="x"),
+        y=alt.Y("gender:Q", title=""),
+    )
+
+
+@st.cache_data
+def get_active_hist(df: pd.DataFrame) -> alt.Chart:
+    return _chart(
+        mark_function="bar",
+        data=df.active.value_counts().sort_index().reset_index(),
+        x=alt.X("index:N", title="Active", sort="x"),
+        y=alt.Y("active:Q", title=""),
+    )
+
+
+with st.echo():
+    df = get_data()
+    edited_df = st.data_editor(
+        df,
+        use_container_width=True,
+        num_rows="dynamic",
+    )
+
+st.caption("Modify cells above 👆 or even ➕ add rows, and check out the impacts below 👇")
+
+left, middle, right = st.columns((4, 3, 3))
+left.altair_chart(get_age_hist(edited_df), use_container_width=True)
+middle.altair_chart(get_gender_hist(edited_df), use_container_width=True)
+right.altair_chart(get_active_hist(edited_df), use_container_width=True)
