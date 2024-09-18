@@ -47,3 +47,4 @@ annotated = st.data_editor(df, hide_index=True, use_container_width=True, disabl
 st.download_button(
     "⬇️ Download annotations as .csv", annotated.to_csv(), "annotated.csv", use_container_width=True
 )
+
