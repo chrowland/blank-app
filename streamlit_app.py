@@ -1,35 +1,66 @@
-import streamlit as st
-import pandas as pd
+import random
+
 import numpy as np
+import pandas as pd
+import streamlit as st
 
-st.title("Scratch app")
-DATE_COLUMN = 'date/time'
-DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
-         'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
-@st.cache_data
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
+np.random.seed(0)
+random.seed(0)
 
-# Create a text element and let the reader know the data is loading.
-data_load_state = st.text('Loading data...')
-# Load 10,000 rows of data into the dataframe.
-data = load_data(10000)
-# Notify the reader that the data was successfully loaded.
-data_load_state.text("Done! (using st.cache_data)")
+st.set_page_config(layout="centered", page_title="Data Editor", page_icon="🧮")
+st.title("🏗 Big Data Editor")
+st.caption("This is a demo of the `st.data_editor`.")
 
-load_data
+""" Wanna use st.data_editor with a million rows dataset? No problem!"""
 
-st.subheader('Raw data')
-st.write(data)
 
-st.subheader('Number of pickups by hour')
-hist_values = np.histogram(
-    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-st.bar_chart(hist_values)
+@st.cache_resource(max_entries=2)
+def get_fake_data():
+    from faker import Faker
 
-st.subheader('Map of all pickups')
-st.map(data)
+    fake = Faker()
+    Faker.seed(0)
+
+    # Generate 5k rows of fake data
+    fake_profile_lite_data = {
+        "name": [],
+        "homepage": [],
+    }
+
+    for _ in range(5000):
+        fake_profile_lite_data["name"].append(fake.name())
+        fake_profile_lite_data["homepage"].append(fake.url())
+
+    return fake_profile_lite_data
+
+
+@st.cache_resource(max_entries=4)
+def get_profile_dataset(number_of_items: int = 100) -> pd.DataFrame:
+    new_data = []
+    fake_profile_data = get_fake_data()
+
+    for _ in range(number_of_items):
+        new_data.append(
+            {
+                "name": random.choice(fake_profile_data["name"]),
+                "age": random.randint(1, 100),
+                "active": random.choice([True, False]),
+                "status": round(random.uniform(0, 1), 2),
+                "homepage": random.choice(fake_profile_data["homepage"]),
+            }
+        )
+
+    profile_df = pd.DataFrame(new_data)
+    profile_df.index = pd.RangeIndex(start=0, stop=len(profile_df), step=1)
+    return profile_df
+
+
+dataset = get_profile_dataset(int(1e5))
+st.write("Length of dataset: ", len(dataset))
+with st.form("data_editor_form"):
+    st.caption("Edit the dataframe below")
+    edited = st.data_editor(dataset, use_container_width=True)
+    submit_button = st.form_submit_button("Submit")
+
+if submit_button:
+    st.expander("Edited dataset", expanded=True).dataframe(edited, use_container_width=True)
