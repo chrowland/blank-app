@@ -38,7 +38,7 @@ df.sentiment = df.sentiment.astype("category")
 df.sentiment = df.sentiment.cat.add_categories(("☯ Neutral", "😤 Negative"))
 
 
-annotated = st.data_editor(df, hide_index=True, use_container_width=True, disabled=["tweet", "author"])
+annotated = st.data_editor(df, hide_index=True, use_container_width=True)
 
 st.download_button(
     "⬇️ Download annotations as .csv", annotated.to_csv(), "annotated.csv", use_container_width=True
