@@ -130,7 +130,6 @@ st.write(f"**Population average price:** ${weighted_pop_avg:,.0f}")
 st.write(f"**For‑Sale average price:** ${weighted_sale_avg:,.0f}")
 
 # Plot combined comparison charts
-st.header("📈 Population vs For‑Sale Distributions by Category")
 
 # Helper function to build DataFrame for each category
 def build_dist_df(x_vals, pop_pdf, sale_pdf):
@@ -143,18 +142,11 @@ def build_dist_df(x_vals, pop_pdf, sale_pdf):
 # Starter
 starter_chart_df = build_dist_df(x, pdf_starter, pdf_sale_starter)
 
-#st.subheader("Starter Homes")
-#st.line_chart(starter_chart_df.set_index("Price"))
-
 # Intermediate
 inter_chart_df = build_dist_df(x, pdf_intermediate, pdf_sale_inter)
-#st.subheader("Intermediate Homes")
-#st.line_chart(inter_chart_df.set_index("Price"))
 
 # Luxury
 luxury_chart_df = build_dist_df(x, pdf_luxury, pdf_sale_lux)
-#st.subheader("Luxury Homes")
-#st.line_chart(luxury_chart_df.set_index("Price"))
 
 st.header("📈 Population vs For‑Sale Distributions by Category (Side‑by‑Side)")
 
@@ -173,3 +165,32 @@ with col3:
     st.subheader("Luxury Homes")
     st.line_chart(luxury_chart_df.set_index("Price"))
 
+eqs = [
+    r"\mu_{\mathrm{starter}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{starter}}^{\mu} + \beta_{\mathrm{starter}}^{\mu}\,\mu_{\mathrm{starter}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{starter}}^{\mu}\,\mathrm{Mortgage\ Rate}",
+
+    r"\sigma_{\mathrm{starter}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{starter}}^{\sigma} + \beta_{\mathrm{starter}}^{\sigma}\,\sigma_{\mathrm{starter}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{starter}}^{\sigma}\,\mathrm{Mortgage\ Rate}",
+
+    r"\mu_{\mathrm{intermediate}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{intermediate}}^{\mu} + \beta_{\mathrm{intermediate}}^{\mu}\,\mu_{\mathrm{intermediate}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{intermediate}}^{\mu}\,\mathrm{Mortgage\ Rate}",
+
+    r"\sigma_{\mathrm{intermediate}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{intermediate}}^{\sigma} + \beta_{\mathrm{intermediate}}^{\sigma}\,\sigma_{\mathrm{intermediate}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{intermediate}}^{\sigma}\,\mathrm{Mortgage\ Rate}",
+
+    r"\mu_{\mathrm{luxury}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{luxury}}^{\mu} + \beta_{\mathrm{luxury}}^{\mu}\,\mu_{\mathrm{luxury}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{luxury}}^{\mu}\,\mathrm{Unemployment}",
+
+    r"\sigma_{\mathrm{luxury}}^{\mathrm{for\text{-}sale}}"
+    r"= C_{\mathrm{luxury}}^{\sigma} + \beta_{\mathrm{luxury}}^{\sigma}\,\sigma_{\mathrm{luxury}}^{\mathrm{population}}"
+    r" + \theta_{\mathrm{luxury}}^{\sigma}\,\mathrm{Unemployment}",
+]
+
+for i, eq in enumerate(eqs, start=1):
+    st.markdown(f"**({i})**")
+    st.latex(eq)
