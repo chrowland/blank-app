@@ -42,14 +42,14 @@ st.header("2) For‑Sale Distribution Parameters (Multipliers)")
 
 st.sidebar.subheader("For Sale Dist Multipliers")
 
-mult_mean_starter  = st.sidebar.slider("Starter Mean Multiplier", 0.5, 1.5, 1.0, step=0.05)
-mult_std_starter   = st.sidebar.slider("Starter Std Dev Multiplier", 0.2, 2.0, 1.0, step=0.05)
+mult_mean_starter  = st.sidebar.slider("Starter Mean Multiplier", 0.5, 1.5, 1.1, step=0.05)
+mult_std_starter   = st.sidebar.slider("Starter Std Dev Multiplier", 0.2, 2.0, 0.8, step=0.05)
 
-mult_mean_inter = st.sidebar.slider("Intermediate Mean Multiplier", 0.5, 1.5, 1.0, step=0.05)
-mult_std_inter  = st.sidebar.slider("Intermediate Std Dev Multiplier", 0.2, 2.0, 1.0, step=0.05)
+mult_mean_inter = st.sidebar.slider("Intermediate Mean Multiplier", 0.5, 1.5, 1.05, step=0.05)
+mult_std_inter  = st.sidebar.slider("Intermediate Std Dev Multiplier", 0.2, 2.0, 1.5, step=0.05)
 
-mult_mean_luxury = st.sidebar.slider("Luxury Mean Multiplier", 0.5, 1.5, 1.0, step=0.05)
-mult_std_luxury  = st.sidebar.slider("Luxury Std Dev Multiplier", 0.2, 2.0, 1.0, step=0.05)
+mult_mean_luxury = st.sidebar.slider("Luxury Mean Multiplier", 0.5, 1.5, 0.85, step=0.05)
+mult_std_luxury  = st.sidebar.slider("Luxury Std Dev Multiplier", 0.2, 2.0, 0.6, step=0.05)
 
 # Compute sale distributions
 sale_mean_starter = pop_mean_starter * mult_mean_starter
