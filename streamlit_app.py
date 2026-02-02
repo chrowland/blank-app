@@ -1,8 +1,9 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-
-st.title("🏠 Home Price Normal Distribution Simulator")
+# Set page configuration
+st.set_page_config(page_title="🏠 Home Price Normal Distribution Simulator", layout="wide")
+#st.title("🏠 Home Price Normal Distribution Simulator")
 
 # 1) Population distributions
 st.header("1) Population Price Distributions")
